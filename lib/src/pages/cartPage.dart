@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopelt/src/components/cartItemWidget.dart';
 import 'package:shopelt/src/models/Cart.dart';
+import 'package:shopelt/src/models/orderList.dart';
+import 'package:shopelt/src/utils/appRoutes.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -30,11 +32,11 @@ class CartPage extends StatelessWidget {
                       fontSize: 20,
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Chip(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     label: Text(
-                      'R\$${cart.totalAmount}',
+                      'R\$${cart.totalAmount.toStringAsFixed(2)}',
                       style: const TextStyle(
                         color: Colors.white,
                       ),
@@ -42,7 +44,12 @@ class CartPage extends StatelessWidget {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: () => print('s'),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(AppRoutes.orders);
+                      Provider.of<OrderList>(context, listen: false)
+                          .addOrder(cart);
+                      cart.clear();
+                    },
                     style: TextButton.styleFrom(
                         textStyle: TextStyle(
                             color: Theme.of(context).colorScheme.tertiary)),

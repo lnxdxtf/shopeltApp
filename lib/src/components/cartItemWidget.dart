@@ -15,6 +15,21 @@ class CartItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dismissible(
       key: ValueKey(cartItem.id),
+      confirmDismiss: (_) => showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Remove Item from Cart'),
+          content: Text('Item ${cartItem.title}'),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text('Yes')),
+            TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text('No')),
+          ],
+        ),
+      ),
       onDismissed: (_) => Provider.of<Cart>(
         context,
         listen: false,
@@ -36,15 +51,11 @@ class CartItemWidget extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             backgroundColor: Theme.of(context).colorScheme.primary,
-            child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                child: Image.network(
-                  cartItem.imageUrl,
-                  fit: BoxFit.cover,
-                )),
+            child: Image.network(
+              cartItem.imageUrl,
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
           ),
           title: Text('${cartItem.title} - ${cartItem.quantity}x'),
           subtitle: Text('R\$ ${cartItem.price}'),

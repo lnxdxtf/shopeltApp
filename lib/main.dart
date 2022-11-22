@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopelt/src/models/orderList.dart';
 import 'package:shopelt/src/pages/cartPage.dart';
+import 'package:shopelt/src/pages/ordersPage.dart';
 import 'package:shopelt/src/providers/productList.dart';
 import 'package:shopelt/src/pages/productDetailPage.dart';
 import 'package:shopelt/src/pages/productsOverview.dart';
@@ -22,7 +24,10 @@ class ShopeltApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => Cart(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (_) => OrderList(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -36,10 +41,11 @@ class ShopeltApp extends StatelessWidget {
             buttonColor: Colors.deepOrange,
           ),
         ),
-        home: const ProductsOverviewPage(),
         routes: {
+          AppRoutes.home: (context) => const ProductsOverviewPage(),
           AppRoutes.productDetailPage: (ctx) => const ProductDetailPage(),
-          AppRoutes.cartPage: (ctx) => const CartPage()
+          AppRoutes.cartPage: (ctx) => const CartPage(),
+          AppRoutes.orders: (ctx) => const OrdersPage(),
         },
       ),
     );

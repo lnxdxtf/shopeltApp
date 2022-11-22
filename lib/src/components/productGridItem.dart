@@ -5,8 +5,8 @@ import 'package:shopelt/src/models/Cart.dart';
 import 'package:shopelt/src/models/product.dart';
 import 'package:shopelt/src/utils/appRoutes.dart';
 
-class ProductItem extends StatelessWidget {
-  const ProductItem({super.key});
+class ProductGridItem extends StatelessWidget {
+  const ProductGridItem({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,18 @@ class ProductItem extends StatelessWidget {
             ),
           ),
           trailing: IconButton(
-            onPressed: () => cart.addItem(product),
+            onPressed: () {
+              cart.addItem(product);
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Produto ${product.title} adicionado'),
+                duration: const Duration(seconds: 3),
+                action: SnackBarAction(
+                  label: 'DESFAZER',
+                  onPressed: () => cart.removeSingleItem(product.id),
+                ),
+              ));
+            },
             icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).colorScheme.secondary,
           ),
