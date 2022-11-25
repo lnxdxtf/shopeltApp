@@ -5,6 +5,8 @@ import 'package:shopelt/src/models/product.dart';
 class ProductList with ChangeNotifier {
   List<Product> _items = dummyProducts;
 
+  int get itemsCount => _items.length;
+
   List<Product> get items => [..._items];
 
   List<Product> get favItems => _items.where((prod) => prod.isFav).toList();

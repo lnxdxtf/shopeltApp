@@ -36,7 +36,7 @@ class CartPage extends StatelessWidget {
                   Chip(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     label: Text(
-                      'R\$${cart.totalAmount.toStringAsFixed(2)}',
+                      '\$${cart.totalAmount.toStringAsFixed(2)}',
                       style: const TextStyle(
                         color: Colors.white,
                       ),
@@ -51,9 +51,12 @@ class CartPage extends StatelessWidget {
                       cart.clear();
                     },
                     style: TextButton.styleFrom(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
                         textStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.tertiary)),
-                    child: const Text('COMPRAR'),
+                    child: const Text('BUY'),
                   )
                 ],
               ),

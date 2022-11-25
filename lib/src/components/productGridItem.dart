@@ -22,8 +22,10 @@ class ProductGridItem extends StatelessWidget {
             product.price.toString(),
             textAlign: TextAlign.end,
             style: const TextStyle(
+              backgroundColor: Colors.black45,
               color: Colors.redAccent,
               fontWeight: FontWeight.bold,
+              fontSize: 22,
             ),
           ),
         ),

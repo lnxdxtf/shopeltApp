@@ -24,7 +24,7 @@ class _OrderItemState extends State<OrderItem> {
           children: [
             ListTile(
               title: Text(
-                  'Total: R\$${widget.orderItem.total.toStringAsFixed(2)}'),
+                  'Total: \$${widget.orderItem.total.toStringAsFixed(2)}'),
               subtitle: Text(
                   DateFormat('dd/MM/yyyy hh:mm').format(widget.orderItem.date)),
               trailing: IconButton(
@@ -46,11 +46,8 @@ class _OrderItemState extends State<OrderItem> {
                         .map((product) => Card(
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  child: Image.network(
-                                    product.imageUrl,
-                                    fit: BoxFit.cover,
-                                  ),
+                                  backgroundImage:
+                                      NetworkImage(product.imageUrl),
                                 ),
                                 title: Text(
                                   product.title,
@@ -59,7 +56,7 @@ class _OrderItemState extends State<OrderItem> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 trailing: Text(
-                                  '${product.quantity}x R\$${product.price}',
+                                  '${product.quantity}x \$${product.price}',
                                   style: const TextStyle(color: Colors.black54),
                                 ),
                                 subtitle: Text(product.id),

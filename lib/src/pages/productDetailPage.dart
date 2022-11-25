@@ -35,7 +35,7 @@ class ProductDetailPage extends StatelessWidget {
                     style: const TextStyle(color: Colors.black54, fontSize: 20),
                   ),
                   Text(
-                    'R\$${product.price}',
+                    '\$${product.price}',
                     style: const TextStyle(color: Colors.black54, fontSize: 20),
                   ),
                 ],

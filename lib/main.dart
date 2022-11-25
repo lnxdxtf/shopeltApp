@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:shopelt/src/models/orderList.dart';
 import 'package:shopelt/src/pages/cartPage.dart';
 import 'package:shopelt/src/pages/ordersPage.dart';
+import 'package:shopelt/src/pages/productFormManagerPage.dart';
+import 'package:shopelt/src/pages/productManagerPage.dart';
 import 'package:shopelt/src/providers/productList.dart';
 import 'package:shopelt/src/pages/productDetailPage.dart';
 import 'package:shopelt/src/pages/productsOverview.dart';
@@ -34,7 +36,7 @@ class ShopeltApp extends StatelessWidget {
         theme: th1.copyWith(
           canvasColor: Colors.white,
           colorScheme: th1.colorScheme.copyWith(
-              primary: Colors.deepPurple.shade400,
+              primary: Colors.deepPurple.shade900,
               secondary: Colors.amber.shade800,
               tertiary: Colors.amberAccent),
           buttonTheme: th1.buttonTheme.copyWith(
@@ -46,6 +48,8 @@ class ShopeltApp extends StatelessWidget {
           AppRoutes.productDetailPage: (ctx) => const ProductDetailPage(),
           AppRoutes.cartPage: (ctx) => const CartPage(),
           AppRoutes.orders: (ctx) => const OrdersPage(),
+          AppRoutes.productsManage: (ctx) => const ProductManagerPage(),
+          AppRoutes.productsFormManage: (ctx) => const ProductFormManagerPage(),
         },
       ),
     );
