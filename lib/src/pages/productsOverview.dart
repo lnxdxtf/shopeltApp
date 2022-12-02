@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:shopelt/src/components/appDrawer.dart';
 import 'package:shopelt/src/components/badgeCart.dart';
 import 'package:shopelt/src/components/productGrid.dart';
-import 'package:shopelt/src/models/Cart.dart';
+import 'package:shopelt/src/providers/Cart.dart';
+import 'package:shopelt/src/providers/productList.dart';
 import 'package:shopelt/src/utils/appRoutes.dart';
 
 enum FilterMoreOptions {
@@ -20,6 +21,19 @@ class ProductsOverviewPage extends StatefulWidget {
 
 class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
   bool _showOnlyFavorite = false;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProductList>(context, listen: false)
+        .loadProducts()
+        .then((value) => setState(() => _isLoading = false));
+  }
+
+  Future<void> _refreshProducts(BuildContext context) {
+    return Provider.of<ProductList>(context, listen: false).loadProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +72,13 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
         title: const Text('Shopelt'),
         centerTitle: true,
       ),
-      body: ProductGrid(_showOnlyFavorite),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : RefreshIndicator(
+              onRefresh: () => _refreshProducts(context),
+              child: ProductGrid(_showOnlyFavorite)),
       drawer: const AppDrawer(),
     );
   }

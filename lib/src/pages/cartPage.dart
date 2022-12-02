@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopelt/src/components/cartItemWidget.dart';
-import 'package:shopelt/src/models/Cart.dart';
-import 'package:shopelt/src/models/orderList.dart';
+import 'package:shopelt/src/providers/Cart.dart';
+import 'package:shopelt/src/providers/orderList.dart';
 import 'package:shopelt/src/utils/appRoutes.dart';
 
 class CartPage extends StatelessWidget {
@@ -43,21 +43,7 @@ class CartPage extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(AppRoutes.orders);
-                      Provider.of<OrderList>(context, listen: false)
-                          .addOrder(cart);
-                      cart.clear();
-                    },
-                    style: TextButton.styleFrom(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.secondary,
-                        textStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.tertiary)),
-                    child: const Text('BUY'),
-                  )
+                  CartBuyButton(cart: cart)
                 ],
               ),
             ),
@@ -71,5 +57,43 @@ class CartPage extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class CartBuyButton extends StatefulWidget {
+  const CartBuyButton({
+    Key? key,
+    required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+
+  @override
+  State<CartBuyButton> createState() => _CartBuyButtonState();
+}
+
+class _CartBuyButtonState extends State<CartBuyButton> {
+  bool _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return _isLoading
+        ? const CircularProgressIndicator()
+        : TextButton(
+            onPressed: widget.cart.itemsCount == 0
+                ? null
+                : () async {
+                    setState(() => _isLoading = true);
+                    await Provider.of<OrderList>(context, listen: false)
+                        .addOrder(widget.cart);
+                    widget.cart.clear();
+                    setState(() => _isLoading = false);
+                    // Navigator.of(context).pushNamed(AppRoutes.orders);
+                  },
+            style: TextButton.styleFrom(
+                textStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.tertiary)),
+            child: const Text('BUY'),
+          );
   }
 }

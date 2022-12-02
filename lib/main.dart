@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopelt/src/models/orderList.dart';
+import 'package:shopelt/src/models/auth.dart';
+import 'package:shopelt/src/pages/authPage.dart';
+import 'package:shopelt/src/pages/homePage.dart';
+import 'package:shopelt/src/providers/orderList.dart';
 import 'package:shopelt/src/pages/cartPage.dart';
 import 'package:shopelt/src/pages/ordersPage.dart';
 import 'package:shopelt/src/pages/productFormManagerPage.dart';
 import 'package:shopelt/src/pages/productManagerPage.dart';
 import 'package:shopelt/src/providers/productList.dart';
 import 'package:shopelt/src/pages/productDetailPage.dart';
-import 'package:shopelt/src/pages/productsOverview.dart';
 import 'package:shopelt/src/utils/appRoutes.dart';
-
-import 'src/models/Cart.dart';
+import 'src/providers/Cart.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ShopeltApp extends StatelessWidget {
   ShopeltApp({super.key});
@@ -22,13 +24,25 @@ class ShopeltApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: (_) => Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, ProductList>(
           create: (_) => ProductList(),
+          update: (ctx, auth, previous) => ProductList(
+            auth.token ?? '',
+            auth.uid ?? '',
+            previous?.items ?? [],
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, OrderList>(
+          create: (_) => OrderList(),
+          update: (ctx, auth, previous) => OrderList(
+            auth.token ?? '',
+            previous?.items ?? [],
+          ),
         ),
         ChangeNotifierProvider(
           create: (_) => Cart(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => OrderList(),
         ),
       ],
       child: MaterialApp(
@@ -36,15 +50,16 @@ class ShopeltApp extends StatelessWidget {
         theme: th1.copyWith(
           canvasColor: Colors.white,
           colorScheme: th1.colorScheme.copyWith(
-              primary: Colors.deepPurple.shade900,
+              primary: Colors.purple.shade500,
               secondary: Colors.amber.shade800,
-              tertiary: Colors.amberAccent),
+              tertiary: Colors.orangeAccent),
           buttonTheme: th1.buttonTheme.copyWith(
             buttonColor: Colors.deepOrange,
           ),
         ),
         routes: {
-          AppRoutes.home: (context) => const ProductsOverviewPage(),
+          AppRoutes.home: (context) => const HomePage(),
+          AppRoutes.auth: (context) => const AuthPage(),
           AppRoutes.productDetailPage: (ctx) => const ProductDetailPage(),
           AppRoutes.cartPage: (ctx) => const CartPage(),
           AppRoutes.orders: (ctx) => const OrdersPage(),
@@ -56,6 +71,7 @@ class ShopeltApp extends StatelessWidget {
   }
 }
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(ShopeltApp());
 }

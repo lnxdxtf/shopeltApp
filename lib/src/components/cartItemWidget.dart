@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopelt/src/models/Cart.dart';
+import 'package:shopelt/src/providers/Cart.dart';
 import 'package:shopelt/src/models/cartItem.dart';
 
 class CartItemWidget extends StatelessWidget {
@@ -50,12 +50,8 @@ class CartItemWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            child: Image.network(
-              cartItem.imageUrl,
-              fit: BoxFit.cover,
-              alignment: Alignment.center,
-            ),
+            backgroundImage: NetworkImage(cartItem.imageUrl),
+            backgroundColor: Theme.of(context).errorColor,
           ),
           title: Text('${cartItem.title} - ${cartItem.quantity}x'),
           subtitle: Text('\$ ${cartItem.price}'),

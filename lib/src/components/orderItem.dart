@@ -14,6 +14,7 @@ class OrderItem extends StatefulWidget {
 }
 
 class _OrderItemState extends State<OrderItem> {
+  final _noImage = 'https://www.tharagold.in/assets/img/no-product-found.png';
   bool _expanded = false;
   @override
   Widget build(BuildContext context) {
@@ -23,8 +24,8 @@ class _OrderItemState extends State<OrderItem> {
         child: Column(
           children: [
             ListTile(
-              title: Text(
-                  'Total: \$${widget.orderItem.total.toStringAsFixed(2)}'),
+              title:
+                  Text('Total: \$${widget.orderItem.total.toStringAsFixed(2)}'),
               subtitle: Text(
                   DateFormat('dd/MM/yyyy hh:mm').format(widget.orderItem.date)),
               trailing: IconButton(
@@ -48,6 +49,7 @@ class _OrderItemState extends State<OrderItem> {
                                 leading: CircleAvatar(
                                   backgroundImage:
                                       NetworkImage(product.imageUrl),
+                                  backgroundColor: Theme.of(context).errorColor,
                                 ),
                                 title: Text(
                                   product.title,
