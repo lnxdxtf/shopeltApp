@@ -4,6 +4,7 @@ import 'package:shopelt/src/exceptions/httpException.dart';
 import 'package:shopelt/src/models/product.dart';
 import 'package:shopelt/src/providers/productList.dart';
 import 'package:shopelt/src/utils/appRoutes.dart';
+import 'package:shopelt/src/utils/assetsPath.dart';
 
 class ProductManagerItem extends StatelessWidget {
   final Product product;
@@ -15,8 +16,17 @@ class ProductManagerItem extends StatelessWidget {
 
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(product.imageUrl),
         backgroundColor: Theme.of(context).errorColor,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: FadeInImage(
+            placeholder: const AssetImage(AssetsPath.productPlaceHolder),
+            image: NetworkImage(product.imageUrl),
+            fit: BoxFit.cover,
+            imageErrorBuilder: (ctx, error, stackTrace) => Image.asset(AssetsPath.productPlaceHolder),
+            placeholderErrorBuilder: (ctx, error, stackTrace) => Image.asset(AssetsPath.productPlaceHolder),
+          ),
+        ),
       ),
       title: Text(product.title),
       trailing: SizedBox(
@@ -53,15 +63,13 @@ class ProductManagerItem extends StatelessWidget {
               ).then((value) async {
                 if (value ?? false) {
                   try {
-                    await Provider.of<ProductList>(context, listen: false)
-                        .removeProduct(product);
+                    await Provider.of<ProductList>(context, listen: false).removeProduct(product);
                   } on HttpException catch (err) {
                     messageNotify.showSnackBar(SnackBar(
                       content: Text(
                         err.toString(),
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Theme.of(context).errorColor, fontSize: 18),
+                        style: TextStyle(color: Theme.of(context).errorColor, fontSize: 18),
                       ),
                     ));
                   }

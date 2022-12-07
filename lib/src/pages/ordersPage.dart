@@ -26,14 +26,32 @@ class OrdersPage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else {
               return RefreshIndicator(
-                  onRefresh: () => _refreshOrders(context),
-                  child: Consumer<OrderList>(
-                    builder: (ctx, orders, child) => ListView.builder(
-                      itemCount: orders.itemsCount,
-                      itemBuilder: (ctx, i) =>
-                          OrderItem(orderItem: orders.items[i]),
-                    ),
-                  ));
+                onRefresh: () => _refreshOrders(context),
+                child: Consumer<OrderList>(
+                  builder: (ctx, orders, child) {
+                    if (orders.itemsCount == 0) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(Icons.bug_report),
+                            Text(
+                              'No Orders',
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: orders.itemsCount,
+                        itemBuilder: (ctx, i) =>
+                            OrderItem(orderItem: orders.items[i]),
+                      );
+                    }
+                  },
+                ),
+              );
             }
           },
         )

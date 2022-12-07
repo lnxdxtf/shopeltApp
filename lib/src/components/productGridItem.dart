@@ -5,6 +5,7 @@ import 'package:shopelt/src/models/auth.dart';
 import 'package:shopelt/src/providers/Cart.dart';
 import 'package:shopelt/src/models/product.dart';
 import 'package:shopelt/src/utils/appRoutes.dart';
+import 'package:shopelt/src/utils/assetsPath.dart';
 
 class ProductGridItem extends StatelessWidget {
   const ProductGridItem({super.key});
@@ -52,11 +53,8 @@ class ProductGridItem extends StatelessWidget {
           leading: Consumer<Product>(
             builder: (ctx, product, _) => IconButton(
               iconSize: 18,
-              onPressed: () =>
-                  product.toggleFav(auth.token ?? '', auth.uid ?? ''),
-              icon: product.isFav
-                  ? const Icon(Icons.favorite)
-                  : const Icon(Icons.favorite_border),
+              onPressed: () => product.toggleFav(auth.token ?? '', auth.uid ?? ''),
+              icon: product.isFav ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
               color: Colors.redAccent,
             ),
           ),
@@ -83,12 +81,14 @@ class ProductGridItem extends StatelessWidget {
             AppRoutes.productDetailPage,
             arguments: product,
           ),
-          child: Image.network(
-            product.imageUrl,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => const Icon(
-              Icons.image_not_supported_outlined,
-              color: Colors.redAccent,
+          child: Hero(
+            tag: product.id,
+            child: FadeInImage(
+              placeholder: const AssetImage(AssetsPath.productPlaceHolder),
+              image: NetworkImage(product.imageUrl),
+              fit: BoxFit.cover,
+              imageErrorBuilder: (ctx, error, stackTrace) => Image.asset(AssetsPath.productPlaceHolder),
+              placeholderErrorBuilder: (ctx, error, stackTrace) => Image.asset(AssetsPath.productPlaceHolder),
             ),
           ),
         ),

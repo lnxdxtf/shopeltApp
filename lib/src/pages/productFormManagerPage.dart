@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopelt/src/models/product.dart';
 import 'package:shopelt/src/providers/productList.dart';
+import 'package:shopelt/src/utils/assetsPath.dart';
 
 class ProductFormManagerPage extends StatefulWidget {
   const ProductFormManagerPage({super.key});
@@ -133,9 +134,7 @@ class _ProductFormManagerPageState extends State<ProductFormManagerPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product Manager Form'),
-        actions: [
-          IconButton(onPressed: _submitForm, icon: const Icon(Icons.save))
-        ],
+        actions: [IconButton(onPressed: _submitForm, icon: const Icon(Icons.save))],
       ),
       body: _isLoading
           ? const Center(
@@ -158,8 +157,7 @@ class _ProductFormManagerPageState extends State<ProductFormManagerPage> {
                         initialValue: _formData['title']?.toString(),
                         decoration: const InputDecoration(labelText: 'Title'),
                         textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (_) =>
-                            FocusScope.of(context).requestFocus(_priceFocus),
+                        onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_priceFocus),
                         onSaved: (value) => _formData['title'] = value ?? '',
                         validator: (value) => formValidator(value, 'title'),
                       ),
@@ -169,40 +167,32 @@ class _ProductFormManagerPageState extends State<ProductFormManagerPage> {
                         textInputAction: TextInputAction.next,
                         focusNode: _priceFocus,
                         keyboardType: TextInputType.number,
-                        onFieldSubmitted: (_) => FocusScope.of(context)
-                            .requestFocus(_descriptionFocus),
-                        onSaved: (value) =>
-                            _formData['price'] = double.parse(value ?? '0'),
+                        onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_descriptionFocus),
+                        onSaved: (value) => _formData['price'] = double.parse(value ?? '0'),
                         validator: (value) => formValidator(value, 'price'),
                       ),
                       TextFormField(
                         initialValue: _formData['description']?.toString(),
-                        decoration:
-                            const InputDecoration(labelText: 'Description'),
+                        decoration: const InputDecoration(labelText: 'Description'),
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.multiline,
                         maxLines: 3,
                         focusNode: _descriptionFocus,
-                        validator: (value) =>
-                            formValidator(value, 'description'),
-                        onSaved: (value) =>
-                            _formData['description'] = value ?? '',
+                        validator: (value) => formValidator(value, 'description'),
+                        onSaved: (value) => _formData['description'] = value ?? '',
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Expanded(
                             child: TextFormField(
-                              decoration:
-                                  const InputDecoration(labelText: 'Image URL'),
+                              decoration: const InputDecoration(labelText: 'Image URL'),
                               keyboardType: TextInputType.url,
                               textInputAction: TextInputAction.done,
                               focusNode: _imageURLFocus,
                               controller: _imageURLController,
-                              onSaved: (value) =>
-                                  _formData['imageUrl'] = value ?? '',
-                              validator: (value) =>
-                                  formValidator(value, 'imageURL'),
+                              onSaved: (value) => _formData['imageUrl'] = value ?? '',
+                              validator: (value) => formValidator(value, 'imageURL'),
                               onFieldSubmitted: (_) => _submitForm(),
                             ),
                           ),
@@ -219,23 +209,15 @@ class _ProductFormManagerPageState extends State<ProductFormManagerPage> {
                             ),
                             child: _imageURLController.text.isEmpty
                                 ? Center(
-                                    child: Icon(Icons.image,
-                                        size: 44,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary),
+                                    child: Icon(Icons.image, size: 44, color: Theme.of(context).colorScheme.secondary),
                                   )
                                 : FittedBox(
-                                    child: Image.network(
-                                      _imageURLController.text,
+                                    child: FadeInImage(
+                                      placeholder: const AssetImage(AssetsPath.productPlaceHolder),
+                                      image: NetworkImage(_imageURLController.text),
                                       fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              const Icon(
-                                        Icons.image_not_supported_outlined,
-                                        size: 44,
-                                        color: Colors.redAccent,
-                                      ),
+                                      imageErrorBuilder: (ctx, error, stackTrace) => Image.asset(AssetsPath.productPlaceHolder),
+                                      placeholderErrorBuilder: (ctx, error, stackTrace) => Image.asset(AssetsPath.productPlaceHolder),
                                     ),
                                   ),
                           )

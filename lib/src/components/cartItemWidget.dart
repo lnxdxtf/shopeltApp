@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopelt/src/providers/Cart.dart';
 import 'package:shopelt/src/models/cartItem.dart';
+import 'package:shopelt/src/utils/assetsPath.dart';
 
 class CartItemWidget extends StatelessWidget {
   final CartItem cartItem;
@@ -21,12 +22,8 @@ class CartItemWidget extends StatelessWidget {
           title: const Text('Remove Item from Cart'),
           content: Text('Item ${cartItem.title}'),
           actions: [
-            TextButton(
-                onPressed: () => Navigator.of(ctx).pop(true),
-                child: const Text('Yes')),
-            TextButton(
-                onPressed: () => Navigator.of(ctx).pop(false),
-                child: const Text('No')),
+            TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: const Text('Yes')),
+            TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: const Text('No')),
           ],
         ),
       ),
@@ -50,8 +47,17 @@ class CartItemWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: ListTile(
           leading: CircleAvatar(
-            backgroundImage: NetworkImage(cartItem.imageUrl),
             backgroundColor: Theme.of(context).errorColor,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: FadeInImage(
+                placeholder: const AssetImage(AssetsPath.productPlaceHolder),
+                image: NetworkImage(cartItem.imageUrl),
+                fit: BoxFit.cover,
+                imageErrorBuilder: (ctx, error, stackTrace) => Image.asset(AssetsPath.productPlaceHolder),
+                placeholderErrorBuilder: (ctx, error, stackTrace) => Image.asset(AssetsPath.productPlaceHolder),
+              ),
+            ),
           ),
           title: Text('${cartItem.title} - ${cartItem.quantity}x'),
           subtitle: Text('\$ ${cartItem.price}'),
